@@ -12,6 +12,7 @@ from sklearn.utils import shuffle
 
 # extract augmented data archive if not already extracted
 if not (os.path.isdir("data_augmented") and os.path.exists("data_augmented.csv")):
+    print("unzipping data")
     zip_ref = zipfile.ZipFile("data_augmented.zip", 'r')
     zip_ref.extractall(".")
     zip_ref.close()
@@ -49,6 +50,8 @@ if not (os.path.isdir("data_augmented") and os.path.exists("data_augmented.csv")
 ## model parameters
 #steering_angle_correction = 0.2
 
+print('reading data')
+
 data = pd.read_csv("data_augmented.csv").to_dict(orient='list')
 
 n_records = len(data['STEERING_ANGLE'])
@@ -71,11 +74,11 @@ model.add(Cropping2D(cropping=((70, 25), (0, 0)), input_shape=(160, 320, 3)))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
 # add 5 convolution layers
-model.add(Convolution2D(filters=24, kernel_size=(5, 5)))
-model.add(Convolution2D(filters=36, kernel_size=(5, 5)))
-model.add(Convolution2D(filters=48, kernel_size=(5, 5)))
-model.add(Convolution2D(filters=64, kernel_size=(3, 3)))
-model.add(Convolution2D(filters=64, kernel_size=(3, 3)))
+model.add(Convolution2D(24, 5, 5))
+model.add(Convolution2D(36, 5, 5))
+model.add(Convolution2D(48, 5, 5))
+model.add(Convolution2D(64, 3, 3))
+model.add(Convolution2D(64, 3, 3))
 
 # flatten output of the last convolution layer
 model.add(Flatten())
@@ -85,8 +88,10 @@ model.add(Dense(100))
 model.add(Dense(50))
 model.add(Dense(1))  # model has only one output - steering angle
 
+print('starting training')
+
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, verbose=1)
+model.fit(np.array(X_train), np.array(y_train), validation_split=0.2, shuffle=True, verbose=1, nb_epoch=30)
 
 # save model to be able to reuse it in autonomous driving
 model.save("model.h5")
