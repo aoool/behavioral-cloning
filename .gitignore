@@ -1,5 +1,9 @@
 .idea/
+.ipynb_checkpoints/
 linux_sim/
-data/
-data.csv
-
+data_raw/
+data_raw.csv
+data_raw.zip
+data_augmented/
+data_augmented.csv
+data_augmented.zip
