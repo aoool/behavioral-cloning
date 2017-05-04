@@ -65,11 +65,11 @@ model.add(Cropping2D(cropping=((70, 25), (0, 0)), input_shape=(160, 320, 3)))
 model.add(Lambda(lambda x: (x / 255.0) - 0.5))
 
 # add 5 convolution layers
-model.add(Convolution2D(24, 5, 5))
-model.add(Convolution2D(36, 5, 5))
-model.add(Convolution2D(48, 5, 5))
-model.add(Convolution2D(64, 3, 3))
-model.add(Convolution2D(64, 3, 3))
+model.add(Convolution2D(24, 5, 5, subsample=(2, 2), activation='relu'))
+model.add(Convolution2D(36, 5, 5, subsample=(2, 2), activation='relu'))
+model.add(Convolution2D(48, 5, 5, subsample=(2, 2), activation='relu'))
+model.add(Convolution2D(64, 3, 3, activation='relu'))
+model.add(Convolution2D(64, 3, 3, activation='relu'))
 
 # flatten output of the last convolution layer
 model.add(Flatten())
@@ -77,6 +77,7 @@ model.add(Flatten())
 # add some fully connected layers
 model.add(Dense(100))
 model.add(Dense(50))
+model.add(Dense(10))
 model.add(Dense(1))  # model has only one output - steering angle
 
 print('starting training')
@@ -92,3 +93,4 @@ model.fit_generator(train_generator,
 
 # save model to be able to reuse it in autonomous driving
 model.save("model.h5")
+
