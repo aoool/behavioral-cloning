@@ -120,16 +120,16 @@ def prepare_data(in_data, correction):
     out_data = {'IMAGE': [], 'STEERING_ANGLE': []}
 
     for i in range(in_records):
-        out_data['IMAGE'].append(in_data['CENTER_IMAGE'])
-        out_data['STEERING_ANGLE'].append(in_data['STEERING_ANGLE'])
+        out_data['IMAGE'].append(in_data['CENTER_IMAGE'][i])
+        out_data['STEERING_ANGLE'].append(in_data['STEERING_ANGLE'][i])
 
-        out_data['IMAGE'].append(in_data['LEFT_IMAGE'])
-        left_angle = in_data['STEERING_ANGLE'] + correction
+        out_data['IMAGE'].append(in_data['LEFT_IMAGE'][i])
+        left_angle = in_data['STEERING_ANGLE'][i] + correction
         left_angle = left_angle if left_angle <= 1.0 else 1.0
         out_data['STEERING_ANGLE'].append(left_angle)
 
-        out_data['IMAGE'].append(in_data['RIGHT_IMAGE'])
-        right_angle = in_data['STEERING_ANGLE'] - correction
+        out_data['IMAGE'].append(in_data['RIGHT_IMAGE'][i])
+        right_angle = in_data['STEERING_ANGLE'][i] - correction
         right_angle = right_angle if right_angle >= -1.0 else -1.0
         out_data['STEERING_ANGLE'].append(right_angle)
 
