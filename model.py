@@ -16,9 +16,10 @@ from sklearn.utils import shuffle
 ###
 
 DATA_CSV = "data_augmented.csv"
-STEERING_ANGLE_CORRECTION = 0.3
+STEERING_ANGLE_CORRECTION = 0.25
 BATCH_SIZE = 256
 TRAIN_TEST_SPLIT_FACTOR = 0.2
+START_EPOCH = 0
 EPOCHS = 10
 MODEL_NAME = 'nvidia'
 MODEL_FILE = 'model.h5'
@@ -191,6 +192,7 @@ def train(from_scratch=True):
                                       nb_val_samples=len(validation_samples),
                                       callbacks=[checkpoint_callback],
                                       nb_epoch=EPOCHS,
+                                      initial_epoch=START_EPOCH,
                                       verbose=1)
 
     print("INFO: save the model to model-%s.h5" % MODEL_NAME)
