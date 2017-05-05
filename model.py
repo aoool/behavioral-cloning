@@ -16,11 +16,11 @@ from sklearn.utils import shuffle
 ###
 
 DATA_CSV = "data_augmented.csv"
-STEERING_ANGLE_CORRECTION = 0.25
+STEERING_ANGLE_CORRECTION = 0.3
 BATCH_SIZE = 256
 TRAIN_TEST_SPLIT_FACTOR = 0.2
 EPOCHS = 10
-MODEL_NAME = 'commaai'
+MODEL_NAME = 'nvidia'
 MODEL_FILE = 'model.h5'
 INPUT_IMAGE_SHAPE = (160, 320, 3)
 INPUT_IMAGE_CROPPING = ((70, 25), (0, 0))
@@ -180,6 +180,9 @@ def train(from_scratch=True):
         print("INFO: load model", MODEL_FILE)
         model = load_model(MODEL_FILE)
 
+    print("INFO: model summary")
+    model.summary()
+
     print("INFO: fit the model")
     checkpoint_callback = ModelCheckpoint("model-%s-{epoch:02d}.h5" % MODEL_NAME, verbose=1)
     history_obj = model.fit_generator(train_generator,
@@ -192,9 +195,6 @@ def train(from_scratch=True):
 
     print("INFO: save the model to model-%s.h5" % MODEL_NAME)
     model.save("model-%s.h5" % MODEL_NAME)
-
-    print("INFO: model summary")
-    model.summary()
 
     print("INFO: draw fit history graph")
     history(history_obj)
