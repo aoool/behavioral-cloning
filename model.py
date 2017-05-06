@@ -23,8 +23,8 @@ START_EPOCH = 0
 EPOCHS = 10
 MODEL_NAME = 'nvidia'
 MODEL_FILE = 'model.h5'
-INPUT_IMAGE_SHAPE = (160, 320, 3)
-INPUT_IMAGE_CROPPING = ((70, 25), (0, 0))
+INPUT_IMAGE_SHAPE = (160, 320, 1)
+INPUT_IMAGE_CROPPING = ((65, 25), (0, 0))
 
 
 ###
@@ -67,9 +67,8 @@ def compile_nvidia_model():
 
     # flatten output of the last convolution layer and add some fully connected layers
     model.add(Flatten())
-    model.add(Dense(100))
-    model.add(Dense(50))
-    model.add(Dense(10))
+    model.add(Dense(110))
+    model.add(Dense(30))
     model.add(Dense(1))
 
     model.compile(loss='mse', optimizer='adam')
@@ -95,7 +94,9 @@ def generator(samples, data, batch_size=128):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                image = cv2.imread(data['IMAGE'][batch_sample])
+                image = np.reshape(
+                    cv2.cvtColor(cv2.imread(data['IMAGE'][batch_sample]), cv2.COLOR_BGR2HSV)[:, :, 1],
+                    INPUT_IMAGE_SHAPE)
                 angle = float(data['STEERING_ANGLE'][batch_sample])
                 images.append(image)
                 angles.append(angle)
