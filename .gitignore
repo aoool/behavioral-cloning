@@ -1,5 +1,6 @@
 .idea/
 .ipynb_checkpoints/
+__pycache__/
 linux_sim/
 data_raw/
 data_raw.csv
